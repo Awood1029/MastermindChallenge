@@ -1,0 +1,41 @@
+﻿@page "/challenge"
+
+<PageTitle>Mastermind Challenge</PageTitle>
+
+<h1>Play Mastermind</h1>
+
+<p role="status">Guesses Left: @currentCount</p>
+
+<form OnValidSubmit="HandleGuessSubmit">
+    <div class="form-group">
+        <InputText class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guess</button>
+</form>
+
+
+<button class="btn btn-primary" @onclick="DecreaseGuessCount">Guess</button>
+
+@code {
+    private int currentCount = 10;
+    private int count = 999;
+
+    private string answer = "1234";
+    private string guess = "";
+
+    private void HandleGuessSubmit()
+    {
+        if (guess == answer) {
+            count++;
+        }
+        else
+        {
+            count--;
+        }
+    }
+
+    private void DecreaseGuessCount()
+    {
+        currentCount--;
+    }
+}
