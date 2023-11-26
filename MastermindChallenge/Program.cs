@@ -1,8 +1,18 @@
+using MastermindChallenge.API.Data;
+using MastermindChallenge.Configurations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
+var connString = builder.Configuration.GetConnectionString("MastermindChallengeDbConnection");
+builder.Services.AddDbContext<MastermindChallengeDbContext>(options => options.UseSqlServer(connString));
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddIdentityCore<Player>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<MastermindChallengeDbContext>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
