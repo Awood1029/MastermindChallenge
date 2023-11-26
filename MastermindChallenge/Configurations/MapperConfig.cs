@@ -11,6 +11,7 @@ namespace MastermindChallenge.Configurations
         {
             CreateMap<PlayerDto, Player>().ReverseMap();
             CreateMap<GameCreateDto, Game>().ReverseMap();
+            CreateMap<PlayerScoresDto, Player>().ReverseMap();
         }
     }
 }

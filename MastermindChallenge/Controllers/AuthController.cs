@@ -54,10 +54,10 @@ namespace MastermindChallenge.API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login(PlayerLoginDto playerDto)
         {
-            _logger.LogInformation($"Login attempt for {playerDto.Email}");
+            _logger.LogInformation($"Login attempt for {playerDto.UserName}");
             try
             {
-                var user = await _userManager.FindByEmailAsync(playerDto.Email);
+                var user = await _userManager.FindByEmailAsync(playerDto.UserName);
                 var passwordValid = await _userManager.CheckPasswordAsync(user, playerDto.Password);
 
                 if (user == null || !passwordValid) return NotFound();

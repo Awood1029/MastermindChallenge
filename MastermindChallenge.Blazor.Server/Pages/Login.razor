@@ -1,0 +1,50 @@
+﻿@* @page "/player/login"
+@inject IAuthenticationService _authService
+
+<h3>Login</h3>
+
+<div>
+    <EditForm Model="LoginModel" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label for="email">Username</label>
+            <InputText class="form-control" @bind-Value="LoginModel.UserName" />
+            <ValidationMessage For="@(() => LoginModel.UserName)" />
+        </div>
+        <div class="form-group">
+            <label for="email">Password</label>
+            <InputText class="form-control" type="password" @bind-Value="LoginModel.Password" />
+            <ValidationMessage For="@(() => LoginModel.Password)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </EditForm>
+</div>
+
+@code {
+    PlayerLoginDto LoginModel = new PlayerLoginDto();
+    string message = "";
+    public async Task HandleLogin()
+    {
+        try
+        {
+            var response = await _authService.AuthenticateAsync(LoginModel);
+
+            if(response)
+            {
+
+            }
+            message = "Invalid Credentials. Please try again.";
+
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode >= 200 && ex.StatusCode <= 299)
+            {
+            }
+            message = ex.Response;
+        }
+    }
+}
+ *@
