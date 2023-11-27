@@ -4,5 +4,6 @@
     {
         Task CreateGameAsync(GameCreateDto gameCreateDto);
         string CheckAnswer();
+        int[] GetRandomNumber(int answerLength);
     }
 }

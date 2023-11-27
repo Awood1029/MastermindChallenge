@@ -34,7 +34,6 @@ namespace MastermindChallenge.API.Controllers
             try
             {
                 var game = _mapper.Map<Game>(gameDto);
-                game.AnswerToGuess = GetRandomNumber(4);
                 await _dbContext.Games.AddAsync(game);
                 await _dbContext.SaveChangesAsync();
                 var test = CreatedAtAction(nameof(CreateGame), new { id = game.Id, answerToGuess = game.AnswerToGuess }, game);
@@ -47,16 +46,16 @@ namespace MastermindChallenge.API.Controllers
             }
         }
 
-        public static int[] GetRandomNumber(int answerLength) 
-        {
-            HttpClient client = new HttpClient();
-            var response = client.GetStringAsync("https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new").Result.Split("\n");
-            int[] answerToGuessArr = new int[answerLength];
-            for (int i = 0; i <  response.Length - 1; i++)
-            {
-                answerToGuessArr[i] = int.Parse(response[i]);
-            }
-            return answerToGuessArr;
-        }
+        //public static int[] GetRandomNumber(int answerLength) 
+        //{
+        //    HttpClient client = new HttpClient();
+        //    var response = client.GetStringAsync("https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new").Result.Split("\n");
+        //    int[] answerToGuessArr = new int[answerLength];
+        //    for (int i = 0; i <  response.Length - 1; i++)
+        //    {
+        //        answerToGuessArr[i] = int.Parse(response[i]);
+        //    }
+        //    return answerToGuessArr;
+        //}
     }
 }
