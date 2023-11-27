@@ -3,5 +3,6 @@
     public class GameCreateDto
     {
         public int Difficulty { get; set; }
+        public int[]? AnswerToGuess { get; set; }
     }
 }

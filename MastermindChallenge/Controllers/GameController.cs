@@ -29,7 +29,7 @@ namespace MastermindChallenge.API.Controllers
 
         [HttpPost]
         [Route("create-game")]
-        public async Task<IActionResult> CreateGame(GameCreateDto gameDto)
+        public async Task<ActionResult<GameCreateDto>> CreateGame(GameCreateDto gameDto)
         {
             try
             {
@@ -37,8 +37,8 @@ namespace MastermindChallenge.API.Controllers
                 game.AnswerToGuess = GetRandomNumber(4);
                 await _dbContext.Games.AddAsync(game);
                 await _dbContext.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(CreateGame), new { id = game.Id }, game);
+                var test = CreatedAtAction(nameof(CreateGame), new { id = game.Id, answerToGuess = game.AnswerToGuess }, game);
+                return CreatedAtAction(nameof(CreateGame), new { id = game.Id, answerToGuess = game.AnswerToGuess }, game);
             }
             catch (Exception ex)
             {

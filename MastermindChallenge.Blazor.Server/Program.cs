@@ -1,5 +1,7 @@
 using MastermindChallenge.Blazor.Server.Data;
 using MastermindChallenge.Blazor.Server.Services;
+using MastermindChallenge.Blazor.Server.Services.Authentication;
+using MastermindChallenge.Blazor.Server.Services.Game;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -10,6 +12,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddHttpClient<IClient, Client>(cl => cl.BaseAddress = new Uri("https://localhost:7280"));
+
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IGameService, GameService>();
 
 var app = builder.Build();
 
