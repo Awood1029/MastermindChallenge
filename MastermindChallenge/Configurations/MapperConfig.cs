@@ -10,7 +10,7 @@ namespace MastermindChallenge.Configurations
         public MapperConfig()
         {
             CreateMap<PlayerDto, Player>().ReverseMap();
-            CreateMap<GameCreateDto, Game>().ReverseMap();
+            CreateMap<SaveGameDto, Game>().ReverseMap();
             CreateMap<PlayerScoresDto, Player>().ReverseMap();
         }
     }

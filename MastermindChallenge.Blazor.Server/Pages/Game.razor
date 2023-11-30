@@ -6,7 +6,31 @@
 
 <h3>Game</h3>
 
-@if (gameStarted)
+@if (!gameStarted)
+{
+    <p>@gamePageModel.Difficulty</p>
+    <EditForm Model="gamePageModel" OnInvalidSubmit="StartGame">
+        <InputRadioGroup @bind-Value="gamePageModel.Difficulty">
+            <div>
+                <InputRadio id="easy" Value="4" checked="checked" />
+                <label for="easy">Easy</label>
+            </div>
+
+            <div>
+                <InputRadio id="medium" Value="5" />
+                <label for="medium">Medium</label>
+            </div>
+
+            <div>
+                <InputRadio id="hard" Value="6" />
+                <label for="hard">Hard</label>
+            </div>
+        </InputRadioGroup>
+        <button type="submit" class="btn btn-primary" @onclick="StartGame">Start Game</button>
+    </EditForm>
+}
+
+@if(gameStarted)
 {
     @if(!gameEnded)
     {
@@ -22,7 +46,7 @@
     }
     else
     {
-        <button class="btn btn-primary" @onclick="StartGame">Play Again</button>
+        <button class="btn btn-primary" @onclick="RestartGame">Play Again</button>
     }
 
 }
@@ -34,12 +58,6 @@
         <p>@message</p>
         <br />
     }
-}
-
-@if (!gameStarted)
-{
-    <button class="btn btn-primary" @onclick="StartGame">Start Game</button>
-
 }
 
 @if(answerToGuess != null)
@@ -92,7 +110,8 @@
     private const int MAX_ATTEMPTS = 10;
     GamePage gamePageModel = new GamePage();
     int[] answerToGuess;
-    int[] playerGuess = new int[4];
+    int[] playerGuess;
+    SaveGameDto gameDto = new SaveGameDto();
 
     private void HandleGuess()
     {
@@ -145,8 +164,10 @@
         gameEnded = false;
         gameStarted = true;
         feedback = new List<string>();
+        guessCount = 0;
+        playerGuess = new int[gamePageModel.Difficulty];
 
-        answerToGuess = _gameService.GetRandomNumber(4);
+        answerToGuess = _gameService.GetRandomNumber(gamePageModel.Difficulty);
 
         // var gameCreateDto = new GameCreateDto();
 
@@ -156,5 +177,19 @@
     public async void EndGame(bool isWinner)
     {
         gameEnded = true;
+
+        // Prepare gameDto for game save
+        gameDto.AnswerToGuess = answerToGuess;
+        // Hard coding for now until difficulty implemented
+        gameDto.Difficulty = gamePageModel.Difficulty;
+        gameDto.IsWinner = isWinner;
+        gameDto.AttemptsUsed = guessCount;
+        await _gameService.SaveGameAsync(gameDto);
+    }
+
+    public void RestartGame()
+    {
+        feedback = feedback = new List<string>();
+        gameStarted = false;
     }
 }

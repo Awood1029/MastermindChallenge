@@ -1,4 +1,4 @@
-﻿@page "/player/registration"
+﻿@* @page "/player/registration"
 @inject IClient _httpClient
 @inject NavigationManager _navManager
 <h3>Create New Player Account</h3>
@@ -66,3 +66,4 @@
         _navManager.NavigateTo("/player/login");
     }
 }
+ *@

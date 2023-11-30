@@ -2,7 +2,7 @@
 {
     public interface IGameService
     {
-        Task CreateGameAsync(GameCreateDto gameCreateDto);
+        Task SaveGameAsync(SaveGameDto gameCreateDto);
         string CheckAnswer();
         int[] GetRandomNumber(int answerLength);
     }

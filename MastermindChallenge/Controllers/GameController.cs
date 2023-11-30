@@ -28,21 +28,20 @@ namespace MastermindChallenge.API.Controllers
 
 
         [HttpPost]
-        [Route("create-game")]
-        public async Task<ActionResult<GameCreateDto>> CreateGame(GameCreateDto gameDto)
+        [Route("save-game")]
+        public async Task<ActionResult<string>> SaveGameAsync(SaveGameDto gameDto)
         {
             try
             {
                 var game = _mapper.Map<Game>(gameDto);
                 await _dbContext.Games.AddAsync(game);
                 await _dbContext.SaveChangesAsync();
-                var test = CreatedAtAction(nameof(CreateGame), new { id = game.Id, answerToGuess = game.AnswerToGuess }, game);
-                return CreatedAtAction(nameof(CreateGame), new { id = game.Id, answerToGuess = game.AnswerToGuess }, game);
+                return Ok(200);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something went wrong in the {nameof(CreateGame)} action: {ex.Message}");
-                return Problem($"Something went wrong in the {nameof(CreateGame)}", statusCode: 500);
+                _logger.LogError(ex, $"Something went wrong in the {nameof(SaveGameAsync)} action: {ex.Message}");
+                return Problem($"Something went wrong in the {nameof(SaveGameAsync)}", statusCode: 500);
             }
         }
 
