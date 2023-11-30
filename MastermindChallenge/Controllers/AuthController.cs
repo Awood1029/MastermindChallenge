@@ -4,6 +4,10 @@ using MastermindChallenge.API.ModelDtos.Player;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace MastermindChallenge.API.Controllers
 {
@@ -14,12 +18,14 @@ namespace MastermindChallenge.API.Controllers
         private readonly ILogger<AuthController> _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<Player> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(ILogger<AuthController> logger, IMapper mapper, UserManager<Player> userManager)
+        public AuthController(ILogger<AuthController> logger, IMapper mapper, UserManager<Player> userManager, IConfiguration configuration)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -52,17 +58,26 @@ namespace MastermindChallenge.API.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(PlayerLoginDto playerDto)
+        public async Task<ActionResult<AuthResponseDto>> Login(PlayerLoginDto playerDto)
         {
             _logger.LogInformation($"Login attempt for {playerDto.UserName}");
             try
             {
-                var user = await _userManager.FindByEmailAsync(playerDto.UserName);
+                var user = await _userManager.FindByNameAsync(playerDto.UserName);
                 var passwordValid = await _userManager.CheckPasswordAsync(user, playerDto.Password);
 
-                if (user == null || !passwordValid) return NotFound();
+                if (user == null || !passwordValid) return Unauthorized(playerDto);
 
-                return Accepted();
+                var tokenString = await GenerateWebToken(user);
+
+                var response = new AuthResponseDto
+                {
+                    Username = playerDto.UserName,
+                    Token = tokenString,
+                    UserId = user.Id
+                };
+
+                return Accepted(response);
 
             }
             catch (Exception ex)
@@ -70,6 +85,32 @@ namespace MastermindChallenge.API.Controllers
                 _logger.LogError(ex, $"Something went wrong in the {nameof(Login)}");
                 return Problem($"Something went wrong in the {nameof(Login)}", statusCode: 500);
             }
+        }
+
+        private async Task<string> GenerateWebToken(Player user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("uid", user.Id)
+            }
+            .Union(userClaims);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JwtSettings:Issuer"],
+                audience: _configuration["JwtSettings:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtSettings:Duration"])),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

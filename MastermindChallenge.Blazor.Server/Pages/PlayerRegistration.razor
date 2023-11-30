@@ -1,4 +1,4 @@
-﻿@* @page "/player/registration"
+﻿@page "/player/registration"
 @inject IClient _httpClient
 @inject NavigationManager _navManager
 <h3>Create New Player Account</h3>
@@ -13,27 +13,22 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group">
-            <label for="email">Email Address</label>
-            <InputText class="form-control" @bind-Value="RegistrationModel.Email" />
-            <ValidationMessage For="@(() => RegistrationModel.Email)" />
-        </div>
-        <div class="form-group">
-            <label for="email">First Name</label>
+            <label for="firstName">First Name</label>
             <InputText class="form-control" @bind-Value="RegistrationModel.FirstName" />
             <ValidationMessage For="@(() => RegistrationModel.FirstName)" />
         </div>
         <div class="form-group">
-            <label for="email">Last Name</label>
+            <label for="lastName">Last Name</label>
             <InputText class="form-control" @bind-Value="RegistrationModel.LastName" />
             <ValidationMessage For="@(() => RegistrationModel.LastName)" />
         </div>
         <div class="form-group">
-            <label for="email">Username</label>
+            <label for="userName">Username</label>
             <InputText class="form-control" @bind-Value="RegistrationModel.UserName" />
             <ValidationMessage For="@(() => RegistrationModel.UserName)" />
         </div>
         <div class="form-group">
-            <label for="email">Password</label>
+            <label for="password">Password</label>
             <InputText class="form-control" type="password" @bind-Value="RegistrationModel.Password" />
             <ValidationMessage For="@(() => RegistrationModel.Password)" />
         </div>
@@ -66,4 +61,3 @@
         _navManager.NavigateTo("/player/login");
     }
 }
- *@

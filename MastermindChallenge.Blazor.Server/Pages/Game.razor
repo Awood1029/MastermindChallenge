@@ -3,6 +3,7 @@
 @using MastermindChallenge.Blazor.Server.Services.Game
 @inject IClient _httpClient
 @inject IGameService _gameService
+@inject AuthenticationStateProvider _authenticationStateProvider
 
 <h3>Game</h3>
 
@@ -64,6 +65,9 @@
 {
     <h1>@string.Join("", answerToGuess)</h1>
 }
+
+<button class="btn btn-primary" @onclick="getUserId">Get User</button>
+
 
 
 @*     <div class="card-body">
@@ -191,5 +195,12 @@
     {
         feedback = feedback = new List<string>();
         gameStarted = false;
+    }
+
+    async Task<string> getUserId()
+    {
+        var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
+        var UserId = user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value;
+        return UserId;
     }
 }
