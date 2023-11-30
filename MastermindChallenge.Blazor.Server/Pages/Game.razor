@@ -1,6 +1,7 @@
 ﻿@page "/game"
 @using MastermindChallenge.Blazor.Server.Models
 @using MastermindChallenge.Blazor.Server.Services.Game
+@using System.Security.Claims
 @inject IClient _httpClient
 @inject IGameService _gameService
 @inject AuthenticationStateProvider _authenticationStateProvider
@@ -9,11 +10,11 @@
 
 @if (!gameStarted)
 {
-    <p>@gamePageModel.Difficulty</p>
+    <p>@userName</p>
     <EditForm Model="gamePageModel" OnInvalidSubmit="StartGame">
         <InputRadioGroup @bind-Value="gamePageModel.Difficulty">
             <div>
-                <InputRadio id="easy" Value="4" checked="checked" />
+                <InputRadio id="easy" Value="4" Checked />
                 <label for="easy">Easy</label>
             </div>
 
@@ -116,6 +117,7 @@
     int[] answerToGuess;
     int[] playerGuess;
     SaveGameDto gameDto = new SaveGameDto();
+    string userName = "Not a username";
 
     private void HandleGuess()
     {
@@ -200,6 +202,7 @@
     async Task<string> getUserId()
     {
         var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
+        userName = user?.Identity?.Name;
         var UserId = user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value;
         return UserId;
     }

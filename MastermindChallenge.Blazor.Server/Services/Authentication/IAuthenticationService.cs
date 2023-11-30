@@ -3,5 +3,6 @@
     public interface IAuthenticationService
     {
         Task<bool> AuthenticateAsync(PlayerLoginDto loginModel);
+        public Task Logout();
     }
 }

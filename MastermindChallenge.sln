@@ -4,7 +4,7 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MastermindChallenge.API", "MastermindChallenge\MastermindChallenge.API.csproj", "{F86B25FE-4A9E-40FA-90EF-2F24BCCCD1E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MastermindChallenge.Blazor.Server", "MastermindChallenge.Blazor.Server\MastermindChallenge.Blazor.Server.csproj", "{65E58D8F-4B11-4287-A5A6-D33B08896B76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MastermindChallenge.Blazor.Server", "MastermindChallenge.Blazor.Server\MastermindChallenge.Blazor.Server.csproj", "{65E58D8F-4B11-4287-A5A6-D33B08896B76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

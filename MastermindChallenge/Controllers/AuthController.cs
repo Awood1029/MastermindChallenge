@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -77,7 +78,7 @@ namespace MastermindChallenge.API.Controllers
                     UserId = user.Id
                 };
 
-                return Accepted(response);
+                return response;
 
             }
             catch (Exception ex)
@@ -98,7 +99,8 @@ namespace MastermindChallenge.API.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("uid", user.Id)
+                new Claim("uid", user.Id),
+                new Claim("username", user.UserName)
             }
             .Union(userClaims);
 
@@ -110,7 +112,9 @@ namespace MastermindChallenge.API.Controllers
                 signingCredentials: credentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenToSend = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return tokenToSend;
         }
     }
 }
