@@ -1,22 +1,27 @@
-﻿namespace MastermindChallenge.Blazor.Server.Services.Game
+﻿using MastermindChallenge.Blazor.Server.Providers;
+
+namespace MastermindChallenge.Blazor.Server.Services.Game
 {
     public class GameService : IGameService
     {
         private readonly IClient _httpClient;
+        private readonly ApiAuthenticationStateProvider _authStateProvider;
 
-        public GameService(IClient httpClient)
+        public GameService(IClient httpClient, ApiAuthenticationStateProvider authStateProvider)
         {
             _httpClient = httpClient;
+            _authStateProvider = authStateProvider;
         }
         public string CheckAnswer()
         {
             return "";
         }
 
-        public Task SaveGameAsync(SaveGameDto gameDto)
+        public async Task SaveGameAsync(SaveGameDto gameDto)
         {
+            var user = (await _authStateProvider.GetAuthenticationStateAsync()).User;
+            gameDto.PlayerId = user.FindFirst(u => u.Type.Contains("uid"))?.Value;
             var result = _httpClient.SaveGameAsync(gameDto);
-            return result;
         }
 
         public int[] GetRandomNumber(int answerLength = 4)

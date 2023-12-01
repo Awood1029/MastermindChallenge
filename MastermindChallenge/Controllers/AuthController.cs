@@ -14,6 +14,7 @@ namespace MastermindChallenge.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
@@ -59,6 +60,7 @@ namespace MastermindChallenge.API.Controllers
 
         [HttpPost]
         [Route("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<AuthResponseDto>> Login(PlayerLoginDto playerDto)
         {
             _logger.LogInformation($"Login attempt for {playerDto.UserName}");

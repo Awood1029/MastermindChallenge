@@ -566,6 +566,9 @@ namespace MastermindChallenge.Blazor.Server.Services
         [Newtonsoft.Json.JsonProperty("isWinner", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsWinner { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("playerId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PlayerId { get; set; }
+
     }
 
 

@@ -67,45 +67,6 @@
     <h1>@string.Join("", answerToGuess)</h1>
 }
 
-<button class="btn btn-primary" @onclick="getUserId">Get User</button>
-
-
-
-@*     <div class="card-body">
-        <EditForm Model="GuessModel" OnValidSubmit="HandleGuess">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <InputText class="form-control" @bind-Value="RegistrationModel.Email" />
-                <ValidationMessage For="@(() => RegistrationModel.Email)" />
-            </div>
-            <div class="form-group">
-                <label for="email">First Name</label>
-                <InputText class="form-control" @bind-Value="RegistrationModel.FirstName" />
-                <ValidationMessage For="@(() => RegistrationModel.FirstName)" />
-            </div>
-            <div class="form-group">
-                <label for="email">Last Name</label>
-                <InputText class="form-control" @bind-Value="RegistrationModel.LastName" />
-                <ValidationMessage For="@(() => RegistrationModel.LastName)" />
-            </div>
-            <div class="form-group">
-                <label for="email">Username</label>
-                <InputText class="form-control" @bind-Value="RegistrationModel.UserName" />
-                <ValidationMessage For="@(() => RegistrationModel.UserName)" />
-            </div>
-            <div class="form-group">
-                <label for="email">Password</label>
-                <InputText class="form-control" type="password" @bind-Value="RegistrationModel.Password" />
-                <ValidationMessage For="@(() => RegistrationModel.Password)" />
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Submit Guess</button>
-        </EditForm>
-    </div> *@
-
-
 @code {
     private bool gameStarted = false;
     private bool gameEnded = false;
@@ -123,6 +84,7 @@
     {
         var numCorrect = 0;
         var positionCorrect = 0;
+        var answerTracker = new Dictionary<int, int>();
 
         if(gamePageModel.PlayerGuess == null || gamePageModel.PlayerGuess.Length != answerToGuess.Length)
         {
@@ -140,15 +102,32 @@
             playerGuess[i] = int.Parse(gamePageModel.PlayerGuess[i].ToString());
         }
 
+        // This will be used to improve the efficiency of determining if the player guessed a number correctly
+        foreach (var num in answerToGuess)
+        {
+            if (answerTracker.ContainsKey(num))
+            {
+                answerTracker[num]++;
+            }
+            else
+            {
+                answerTracker.Add(num, 1);
+            }
+        }
+
         for (int i = 0; i < playerGuess.Length; i++)
         {
-            if (answerToGuess.Contains(playerGuess[i])) numCorrect++;
+            if (answerTracker.ContainsKey(playerGuess[i]) && answerTracker[playerGuess[i]] > 0)
+            {
+                answerTracker[playerGuess[i]]--;
+                numCorrect++;
+            }
             if (playerGuess[i] == answerToGuess[i]) positionCorrect++;
         }
 
         guessCount++;
 
-        if(numCorrect == answerToGuess.Length && positionCorrect == answerToGuess.Length)
+        if(positionCorrect == answerToGuess.Length)
         {
             feedback.Add($"Great job, you got it in {guessCount} attempts!");
             gameWon = true;
@@ -159,7 +138,7 @@
             feedback.Add($"You guessed {gamePageModel.PlayerGuess} and got {numCorrect} numbers correct and {positionCorrect} positions correct.");
             if(guessCount >= MAX_ATTEMPTS)
             {
-                feedback.Add($"Unfortunately that was your last chance, try playing again");
+                feedback.Add($"The correct answer was {answerToGuess} Unfortunately that was your last chance, try playing again");
                 EndGame(false);
             }
         }
@@ -174,10 +153,6 @@
         playerGuess = new int[gamePageModel.Difficulty];
 
         answerToGuess = _gameService.GetRandomNumber(gamePageModel.Difficulty);
-
-        // var gameCreateDto = new GameCreateDto();
-
-        // await _httpClient.CreateGameAsync(gameCreateDto);
     }
 
     public async void EndGame(bool isWinner)
@@ -197,13 +172,5 @@
     {
         feedback = feedback = new List<string>();
         gameStarted = false;
-    }
-
-    async Task<string> getUserId()
-    {
-        var user = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
-        userName = user?.Identity?.Name;
-        var UserId = user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value;
-        return UserId;
     }
 }

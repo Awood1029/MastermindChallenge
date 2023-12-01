@@ -1,4 +1,3 @@
-using MastermindChallenge.Blazor.Server.Data;
 using MastermindChallenge.Blazor.Server.Services;
 using MastermindChallenge.Blazor.Server.Services.Authentication;
 using MastermindChallenge.Blazor.Server.Services.Game;
