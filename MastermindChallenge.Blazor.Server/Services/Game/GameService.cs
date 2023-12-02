@@ -38,11 +38,11 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
             return;
         }
 
-        public async Task<IEnumerable<Top10ScoresDto>> GetLeaderboard(int difficulty)
+        public async Task<IEnumerable<Top10ScoresDto>> GetLeaderboard()
         {
             try
             {
-                var response = await _httpClient.LeaderboardAsync(difficulty);
+                var response = await _httpClient.LeaderboardAsync();
                 return response;
             }
             catch (Exception ex)
