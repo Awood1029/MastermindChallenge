@@ -49,7 +49,7 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
             var positionCorrect = 0;
             var answerTracker = new Dictionary<int, int>();
 
-            if (gamePageModel.PlayerGuessString == null || gamePageModel.PlayerGuessArr.Length != gamePageModel.AnswerToGuess.Length)
+            if (gamePageModel.PlayerGuessString == null || gamePageModel.PlayerGuessString.Length != gamePageModel.AnswerToGuess.Length)
             {
                 gamePageModel.Feedback.Add($"Invalid guess. Please only guess {gamePageModel.AnswerToGuess.Length} digits.");
                 return;
