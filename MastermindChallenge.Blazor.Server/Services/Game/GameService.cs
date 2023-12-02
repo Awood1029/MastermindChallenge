@@ -16,8 +16,7 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
 
         public async Task SaveGameAsync(SaveGameDto gameDto)
         {
-            var user = (await _authStateProvider.GetAuthenticationStateAsync()).User;
-            gameDto.PlayerId = user.FindFirst(u => u.Type.Contains("uid"))?.Value;
+
             var result = _httpClient.SaveGameAsync(gameDto);
         }
 
@@ -130,6 +129,11 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
             gameDto.Difficulty = gamePageModel.Difficulty;
             gameDto.IsWinner = isWinner;
             gameDto.AttemptsUsed = gamePageModel.GuessCount;
+
+            // Get Current User Id
+            var user = (await _authStateProvider.GetAuthenticationStateAsync()).User;
+            gameDto.PlayerId = user.FindFirst(u => u.Type.Contains("uid"))?.Value;
+
             await _httpClient.SaveGameAsync(gameDto);
         }
     }
