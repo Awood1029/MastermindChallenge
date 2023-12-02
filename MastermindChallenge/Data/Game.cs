@@ -12,4 +12,5 @@ public partial class Game
     public int AttemptsUsed { get; set; }
     public bool IsWinner { get; set; }
     public string PlayerId { get; set; }
+    public Player Player { get; set; }
 }

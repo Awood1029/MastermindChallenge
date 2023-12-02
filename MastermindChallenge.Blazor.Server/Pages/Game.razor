@@ -6,66 +6,80 @@
 @inject IGameService _gameService
 @inject AuthenticationStateProvider _authenticationStateProvider
 
-<h3>Game</h3>
 
-@if (!gameStarted)
-{
-    <p>@userName</p>
-    <EditForm Model="gamePageModel" OnInvalidSubmit="StartGame">
-        <InputRadioGroup @bind-Value="gamePageModel.Difficulty">
-            <div>
-                <InputRadio id="easy" Value="4" Checked />
-                <label for="easy">Easy</label>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Game</h3>
+                <div class="card">
+                    <div class="card">
+                        <div class="card-body">
+                            @if (!gameStarted)
+                            {
+                                <EditForm Model="gamePageModel" OnInvalidSubmit="StartGame">
+                                    <InputRadioGroup @bind-Value="gamePageModel.Difficulty">
+                                        <div>
+                                            <InputRadio id="easy" Value="4" Checked />
+                                            <label for="easy">Easy</label>
+                                        </div>
+
+                                        <div>
+                                            <InputRadio id="medium" Value="5" />
+                                            <label for="medium">Medium</label>
+                                        </div>
+
+                                        <div>
+                                            <InputRadio id="hard" Value="6" />
+                                            <label for="hard">Hard</label>
+                                        </div>
+                                    </InputRadioGroup>
+                                    <button type="submit" class="btn btn-primary" @onclick="StartGame">Start Game</button>
+                                </EditForm>
+                            }
+                            else
+                            {
+                                @if (!gameEnded)
+                                {
+                                    <p>Attempts: @guessCount / @MAX_ATTEMPTS </p>
+                                    <h5 class="card-title">Guess the Number</h5>
+                                    <p class="card-text">Enter your guess below:</p>
+                                    <EditForm Model="gamePageModel" OnValidSubmit="HandleGuess">
+                                        <div class="form-group">
+                                            <InputText class="form-control" @bind-Value="gamePageModel.PlayerGuess" />
+                                            <ValidationMessage For="@(() => gamePageModel.PlayerGuess)" />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Submit Guess</button>
+                                    </EditForm>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary" @onclick="RestartGame">Play Again</button>
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <InputRadio id="medium" Value="5" />
-                <label for="medium">Medium</label>
+            <div class="col-md-6">
+                <h3>History</h3>
+                <div class="card">
+                    <div class="card-body">
+                        @if (feedback.Count > 0)
+                        {
+                            @foreach (var message in feedback)
+                            {
+                                <p>@message</p>
+                            }
+                        }
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+<button type="submit" class="btn btn-primary" @onclick="GiveAnswer">Give answer</button>
 
-            <div>
-                <InputRadio id="hard" Value="6" />
-                <label for="hard">Hard</label>
-            </div>
-        </InputRadioGroup>
-        <button type="submit" class="btn btn-primary" @onclick="StartGame">Start Game</button>
-    </EditForm>
-}
-
-@if(gameStarted)
-{
-    @if(!gameEnded)
-    {
-        <p>Attempts: @guessCount / @MAX_ATTEMPTS </p>
-        <EditForm Model="gamePageModel" OnValidSubmit="HandleGuess">
-            <div class="form-group">
-                <label for="guess">Enter Guess</label>
-                <InputText class="form-control" @bind-Value="gamePageModel.PlayerGuess" />
-                <ValidationMessage For="@(() => gamePageModel.PlayerGuess)" />
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Submit Guess</button>
-        </EditForm>
-    }
-    else
-    {
-        <button class="btn btn-primary" @onclick="RestartGame">Play Again</button>
-    }
-
-}
-
-@if(feedback.Count > 0)
-{
-    @foreach (var message in feedback)
-    {
-        <p>@message</p>
-        <br />
-    }
-}
-
-@if(answerToGuess != null)
-{
-    <h1>@string.Join("", answerToGuess)</h1>
-}
 
 @code {
     private bool gameStarted = false;
@@ -172,5 +186,10 @@
     {
         feedback = feedback = new List<string>();
         gameStarted = false;
+    }
+
+    public void GiveAnswer()
+    {
+        feedback.Add($"The correct answer was {answerToGuess}");
     }
 }

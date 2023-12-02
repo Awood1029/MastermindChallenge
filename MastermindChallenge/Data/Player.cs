@@ -8,5 +8,5 @@ public partial class Player : IdentityUser
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public int NumberOfWins { get; set; }
+    ICollection<Game> Games { get; set; }
 }

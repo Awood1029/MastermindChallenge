@@ -1,0 +1,90 @@
+﻿.container {
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+.form-control {
+    border-radius: 0;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+    .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+.leaderboard-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.leaderboard-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.leaderboard-title {
+    text-align: center;
+    font-size: 24px;
+    color: #007bff;
+}
+
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.player-name {
+    font-size: 18px;
+    color: #333;
+}
+
+.player-score {
+    font-size: 18px;
+    color: #333;
+}
+

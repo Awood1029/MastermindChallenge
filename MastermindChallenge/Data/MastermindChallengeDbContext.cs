@@ -35,6 +35,9 @@ public partial class MastermindChallengeDbContext : IdentityDbContext
 
         modelBuilder.Entity<Player>(entity =>
         {
+            //entity.HasMany(p => p.Games)
+            //.WithOne(p => p.Player);
+
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -50,8 +53,7 @@ public partial class MastermindChallengeDbContext : IdentityDbContext
             new Player
             {
                 Id = "e9b3c7c3-1da7-4b11-a3bf-3871da977b7e",
-                Email = "seeddata@email.com",
-                UserName = "seeddata101",
+                UserName = "testuser1",
                 FirstName = "Seed",
                 LastName = "Data",
                 PasswordHash = hasher.HashPassword(null, "P@ssword1")
@@ -59,13 +61,118 @@ public partial class MastermindChallengeDbContext : IdentityDbContext
             new Player
             {
                 Id = "9321fd15-7f7d-42b9-9f45-ba63eec8e593",
-                Email = "dataseed@email.com",
-                UserName = "dataseed101",
+                UserName = "testuser2",
                 FirstName = "Data",
                 LastName = "Seed",
                 PasswordHash = hasher.HashPassword(null, "P@ssword1")
+            },
+            new Player
+            {
+                Id = "c3b7e9e9-1da7-4b11-a3bf-3871da977b7e",
+                UserName = "testuser3",
+                FirstName = "Test",
+                LastName = "User",
+                PasswordHash = hasher.HashPassword(null, "P@ssword1")
+            },
+            new Player
+            {
+                Id = "e64eef9d-6c4d-4af9-8ace-60b96825c05a",
+                UserName = "testuser4",
+                FirstName = "Test",
+                LastName = "User",
+                PasswordHash = hasher.HashPassword(null, "P@ssword1")
+            },
+            new Player
+            {
+                Id = "a13f7650-1f8f-4401-8e80-40be41637141",
+                UserName = "testuser5",
+                FirstName = "Test",
+                LastName = "User",
+                PasswordHash = hasher.HashPassword(null, "P@ssword1")
+            },
+            new Player
+            {
+                Id = "67b06a1c-f6ad-4527-b2d5-0eb3917e739e",
+                UserName = "testuser6",
+                FirstName = "Test",
+                LastName = "User",
+                PasswordHash = hasher.HashPassword(null, "P@ssword1")
+            },
+            new Player
+            {
+                Id = "4ae472f3-08ad-42d6-a593-1e6eae9b8332",
+                UserName = "testuser7",
+                FirstName = "Test",
+                LastName = "User",
+                PasswordHash = hasher.HashPassword(null, "P@ssword1")
             }
-    );
+        );
+
+        //modelBuilder.Entity<Game>().HasData(
+        //    new Game
+        //    {
+        //        Id = 1,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 1,
+        //        PlayerId = "e9b3c7c3-1da7-4b11-a3bf-3871da977b7e",
+        //        AnswerToGuess = [1, 2, 3, 4]
+        //    },
+        //    new Game
+        //    {
+        //        Id = 2,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 2,
+        //        PlayerId = "9321fd15-7f7d-42b9-9f45-ba63eec8e593",
+        //        AnswerToGuess = [1, 2, 3, 4]
+        //    },
+        //    new Game
+        //    {
+        //        Id = 3,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 3,
+        //        PlayerId = "c3b7e9e9-1da7-4b11-a3bf-3871da977b7e",
+        //        AnswerToGuess = [1,2,3,4]
+        //    },
+        //    new Game
+        //    {
+        //        Id = 4,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 4,
+        //        PlayerId = "e64eef9d-6c4d-4af9-8ace-60b96825c05a",
+        //        AnswerToGuess = [1,2,3,4]
+        //    },
+        //    new Game
+        //    {
+        //        Id = 5,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 5,
+        //        PlayerId = "a13f7650-1f8f-4401-8e80-40be41637141",
+        //        AnswerToGuess = [1,2,3,4]
+        //    },
+        //    new Game
+        //    {
+        //        Id = 6,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 6,
+        //        PlayerId = "67b06a1c-f6ad-4527-b2d5-0eb3917e739e",
+        //        AnswerToGuess = [1,2,3,4]
+        //    },
+        //    new Game
+        //    {
+        //        Id = 7,
+        //        Difficulty = 4,
+        //        IsWinner = true,
+        //        AttemptsUsed = 7,
+        //        PlayerId = "4ae472f3-08ad-42d6-a593-1e6eae9b8332",
+        //        AnswerToGuess = [1,2,3,4]}
+        //    );
+
         OnModelCreatingPartial(modelBuilder);
     }
 

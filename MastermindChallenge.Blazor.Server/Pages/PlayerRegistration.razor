@@ -8,33 +8,42 @@
         <p>@message</p>
     </div>
 }
-<div class="card-body">
-    <EditForm Model="RegistrationModel" OnValidSubmit="HandleRegistration">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <InputText class="form-control" @bind-Value="RegistrationModel.FirstName" />
-            <ValidationMessage For="@(() => RegistrationModel.FirstName)" />
-        </div>
-        <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <InputText class="form-control" @bind-Value="RegistrationModel.LastName" />
-            <ValidationMessage For="@(() => RegistrationModel.LastName)" />
-        </div>
-        <div class="form-group">
-            <label for="userName">Username</label>
-            <InputText class="form-control" @bind-Value="RegistrationModel.UserName" />
-            <ValidationMessage For="@(() => RegistrationModel.UserName)" />
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <InputText class="form-control" type="password" @bind-Value="RegistrationModel.Password" />
-            <ValidationMessage For="@(() => RegistrationModel.Password)" />
-        </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="text-center">Register</h3>
+            <div class="card">
+                <div class="card-body">
+                    <EditForm Model="RegistrationModel" OnValidSubmit="HandleRegistration">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <InputText class="form-control" @bind-Value="RegistrationModel.FirstName" />
+                            <ValidationMessage For="@(() => RegistrationModel.FirstName)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <InputText class="form-control" @bind-Value="RegistrationModel.LastName" />
+                            <ValidationMessage For="@(() => RegistrationModel.LastName)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="userName">Username</label>
+                            <InputText class="form-control" @bind-Value="RegistrationModel.UserName" />
+                            <ValidationMessage For="@(() => RegistrationModel.UserName)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <InputText class="form-control" type="password" @bind-Value="RegistrationModel.Password" />
+                            <ValidationMessage For="@(() => RegistrationModel.Password)" />
+                        </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
-    </EditForm>
+                        <button type="submit" class="btn btn-primary mt-2 w-100">Register</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {

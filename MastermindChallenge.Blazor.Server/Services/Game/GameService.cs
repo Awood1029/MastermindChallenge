@@ -35,5 +35,12 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
             }
             return answerToGuessArr;
         }
+
+        public async Task<IEnumerable<Top10ScoresDto>> GetLeaderboard(int difficulty)
+        {
+            var response = await _httpClient.LeaderboardAsync(difficulty);
+
+            return response.ToList();
+        }
     }
 }
