@@ -105,71 +105,17 @@
         remainingHints = gamePageModel.Difficulty;
 
         await _gameService.GetRandomNumber(gamePageModel);
+
+        if(gamePageModel.AnswerToGuess == null)
+        {
+            gamePageModel.Feedback.Add("Error generating random number");
+            gameStarted = false;
+        }
     }
 
     private void HandleGuess()
     {
         _gameService.HandleGuess(gamePageModel);
-        // var numCorrect = 0;
-        // var positionCorrect = 0;
-        // var answerTracker = new Dictionary<int, int>();
-
-        // if(gamePageModel.PlayerGuess == null || gamePageModel.PlayerGuess.Length != answerToGuess.Length)
-        // {
-        //     feedback.Add($"Invalid guess. Please only guess {answerToGuess.Length} digits.");
-        //     return;
-        // }
-
-        // for (int i = 0; i < gamePageModel.PlayerGuess.Length; i++)
-        // {
-        //     if(Char.IsLetter(gamePageModel.PlayerGuess[i]))
-        //     {
-        //         feedback.Add($"Invalid guess. Please only use numbers.");
-        //         return;
-        //     }
-        //     playerGuess[i] = int.Parse(gamePageModel.PlayerGuess[i].ToString());
-        // }
-
-        // // This will be used to improve the efficiency of determining if the player guessed a number correctly
-        // foreach (var num in answerToGuess)
-        // {
-        //     if (answerTracker.ContainsKey(num))
-        //     {
-        //         answerTracker[num]++;
-        //     }
-        //     else
-        //     {
-        //         answerTracker.Add(num, 1);
-        //     }
-        // }
-
-        // for (int i = 0; i < playerGuess.Length; i++)
-        // {
-        //     if (answerTracker.ContainsKey(playerGuess[i]) && answerTracker[playerGuess[i]] > 0)
-        //     {
-        //         answerTracker[playerGuess[i]]--;
-        //         numCorrect++;
-        //     }
-        //     if (playerGuess[i] == answerToGuess[i]) positionCorrect++;
-        // }
-
-        // guessCount++;
-
-        // if(positionCorrect == answerToGuess.Length)
-        // {
-        //     feedback.Add($"Great job, you got it in {guessCount} attempts!");
-        //     gameWon = true;
-        //     EndGame(true);
-        // }
-        // else
-        // {
-        //     feedback.Add($"You guessed {gamePageModel.PlayerGuess} and got {numCorrect} numbers correct and {positionCorrect} positions correct.");
-        //     if(guessCount >= MAX_ATTEMPTS)
-        //     {
-        //         feedback.Add($"The correct answer was {answerToGuess} Unfortunately that was your last chance, try playing again");
-        //         EndGame(false);
-        //     }
-        // }
     }
 
     public void RestartGame()
