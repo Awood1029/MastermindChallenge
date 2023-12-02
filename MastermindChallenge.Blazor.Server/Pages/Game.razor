@@ -50,6 +50,7 @@
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-block">Submit Guess</button>
                                     </EditForm>
+                                    <button class="btn btn-primary btn-block" @onclick="GetHint">Get Hint</button>
                                 }
                                 else
                                 {
@@ -92,7 +93,19 @@
     int[] answerToGuess;
     int[] playerGuess;
     SaveGameDto gameDto = new SaveGameDto();
-    string userName = "Not a username";
+    int remainingHints;
+
+    public async void StartGame()
+    {
+        gameEnded = false;
+        gameStarted = true;
+        feedback = new List<string>();
+        guessCount = 0;
+        playerGuess = new int[gamePageModel.Difficulty];
+        remainingHints = gamePageModel.Difficulty;
+
+        answerToGuess = await _gameService.GetRandomNumber(gamePageModel.Difficulty);
+    }
 
     private void HandleGuess()
     {
@@ -158,17 +171,6 @@
         }
     }
 
-    public async void StartGame() 
-    {
-        gameEnded = false;
-        gameStarted = true;
-        feedback = new List<string>();
-        guessCount = 0;
-        playerGuess = new int[gamePageModel.Difficulty];
-
-        answerToGuess = _gameService.GetRandomNumber(gamePageModel.Difficulty);
-    }
-
     public async void EndGame(bool isWinner)
     {
         gameEnded = true;
@@ -188,8 +190,23 @@
         gameStarted = false;
     }
 
+    public void GetHint()
+    {
+        if(remainingHints > 0)
+        {
+            var hintPosition = answerToGuess.Length - remainingHints;
+            var hint = $"The number in position {hintPosition + 1} is {answerToGuess[hintPosition]}";
+            feedback.Add($"Hint: {hint}");
+            remainingHints--;
+        }
+        else
+        {
+            feedback.Add($"You have no more hints remaining");
+        };
+    }
+
     public void GiveAnswer()
     {
-        feedback.Add($"The correct answer was {answerToGuess}");
+        feedback.Add($"The correct answer was {answerToGuess.ToString()}");
     }
 }

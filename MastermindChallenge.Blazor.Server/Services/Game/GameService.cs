@@ -24,14 +24,16 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
             var result = _httpClient.SaveGameAsync(gameDto);
         }
 
-        public int[] GetRandomNumber(int answerLength = 4)
+        public async Task<int[]> GetRandomNumber(int answerLength = 4)
         {
             HttpClient client = new HttpClient();
-            var response = client.GetStringAsync("https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new").Result.Split("\n");
+            var response = await client.GetStringAsync("https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new");
+            // We get the answer as a single string, so we need to split it into an array of chars to then convert to an array of ints
+            var answerStringArr = response.Split("\n");
             int[] answerToGuessArr = new int[answerLength];
-            for (int i = 0; i < response.Length - 1; i++)
+            for (int i = 0; i < answerStringArr.Length - 1; i++)
             {
-                answerToGuessArr[i] = int.Parse(response[i]);
+                answerToGuessArr[i] = int.Parse(answerStringArr[i]);
             }
             return answerToGuessArr;
         }
