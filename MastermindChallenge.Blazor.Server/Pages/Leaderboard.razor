@@ -1,0 +1,68 @@
+﻿@page "/leaderboard"
+@inject IGameService _gameService
+
+@if(topScores != null)
+{
+    <div class="container">
+        <div class="leaderboard-card">
+            <div class="card-body">
+                <h3 class="leaderboard-title">Easy Leaderboard</h3>
+                <div class="leaderboard-item">
+                    <span class="player-name"><strong>Player Name</strong></span>
+                    <span class="player-score"><strong>Player Score</strong></span>
+                </div>
+                @foreach (var player in topScores.Where(score => score.Difficulty == 4))
+                {
+                    <div class="leaderboard-item">
+                        <span class="player-name">@player.Username</span>
+                        <span class="player-score">@player.AttemptsUsed</span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="leaderboard-card">
+            <div class="card-body">
+                <h3 class="leaderboard-title">Medium Leaderboard</h3>
+                <div class="leaderboard-item">
+                    <span class="player-name"><strong>Player Name</strong></span>
+                    <span class="player-score"><strong>Player Score</strong></span>
+                </div>
+                @foreach (var player in topScores.Where(score => score.Difficulty == 5))
+                {
+                    <div class="leaderboard-item">
+                        <span class="player-name">@player.Username</span>
+                        <span class="player-score">@player.AttemptsUsed</span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="leaderboard-card">
+            <div class="card-body">
+                <h3 class="leaderboard-title">Hard Leaderboard</h3>
+                <div class="leaderboard-item">
+                    <span class="player-name"><strong>Player Name</strong></span>
+                    <span class="player-score"><strong>Player Score</strong></span>
+                </div>
+                @foreach (var player in topScores.Where(score => score.Difficulty == 6))
+                {
+                    <div class="leaderboard-item">
+                        <span class="player-name">@player.Username</span>
+                        <span class="player-score">@player.AttemptsUsed</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    IEnumerable<Top10ScoresDto>? topScores { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        topScores = await _gameService.GetLeaderboard(4);
+    }
+
+}

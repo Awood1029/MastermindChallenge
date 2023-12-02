@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/MastermindChallengeAPI/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsMastermindChallengeDbCo_928BCFB90B",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/mastermindchallengedbdbserver/databases/MastermindChallengeDB",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:MastermindChallengeDbConnection",
+      "dynamicId": null
+    }
+  }
+}

@@ -1,0 +1,200 @@
+﻿@page "/"
+@using MastermindChallenge.Blazor.Server.Models
+@using MastermindChallenge.Blazor.Server.Services.Game
+@using System.Security.Claims
+@inject IClient _httpClient
+@inject IGameService _gameService
+@inject AuthenticationStateProvider _authenticationStateProvider
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Game</h3>
+                <div class="card">
+                    <div class="card">
+                        <div class="card-body">
+                            @if (!gameStarted)
+                            {
+                                <EditForm Model="gamePageModel" OnInvalidSubmit="StartGame">
+                                    <InputRadioGroup @bind-Value="gamePageModel.Difficulty">
+                                        <div>
+                                            <InputRadio id="easy" Value="4" Checked />
+                                            <label for="easy">Easy</label>
+                                        </div>
+
+                                        <div>
+                                            <InputRadio id="medium" Value="5" />
+                                            <label for="medium">Medium</label>
+                                        </div>
+
+                                        <div>
+                                            <InputRadio id="hard" Value="6" />
+                                            <label for="hard">Hard</label>
+                                        </div>
+                                    </InputRadioGroup>
+                                    <button type="submit" class="btn btn-primary" @onclick="StartGame">Start Game</button>
+                                </EditForm>
+                            }
+                            else
+                            {
+                            @if (!gamePageModel.GameEnded)
+                                {
+                                    <p>Attempts: @gamePageModel.GuessCount / @MAX_ATTEMPTS </p>
+                                    <h5 class="card-title">Guess the Number</h5>
+                                    <p class="card-text">Enter your guess below:</p>
+                                    <EditForm Model="gamePageModel" OnValidSubmit="HandleGuess">
+                                        <div class="form-group">
+                                            <InputText class="form-control" @bind-Value="gamePageModel.PlayerGuessString" />
+                                            <ValidationMessage For="@(() => gamePageModel.PlayerGuessString)" />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Submit Guess</button>
+                                    </EditForm>
+                                    <button class="btn btn-primary btn-block" @onclick="GetHint">Get Hint</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary" @onclick="RestartGame">Play Again</button>
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>History</h3>
+                <div class="card">
+                    <div class="card-body">
+                        @if (gamePageModel.Feedback.Count > 0)
+                        {
+                            @foreach (var message in gamePageModel.Feedback)
+                            {
+                                <p>@message</p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@if(gameStarted)
+{
+    <button type="submit" class="btn btn-primary" @onclick="GiveAnswer">Give answer</button>
+}
+
+
+@code {
+    private bool gameStarted = false;
+    private bool gameWon = false;
+    private const int MAX_ATTEMPTS = 10;
+    GamePage gamePageModel = new GamePage();
+    int[] answerToGuess;
+    int[] playerGuess;
+    SaveGameDto gameDto = new SaveGameDto();
+    int remainingHints;
+
+    public async void StartGame()
+    {
+        gamePageModel.GameEnded = false;
+        gameStarted = true;
+        gamePageModel.Feedback = new List<string>();
+        gamePageModel.GuessCount = 0;
+        gamePageModel.PlayerGuessArr = new int[gamePageModel.Difficulty];
+        remainingHints = gamePageModel.Difficulty;
+
+        await _gameService.GetRandomNumber(gamePageModel);
+    }
+
+    private void HandleGuess()
+    {
+        _gameService.HandleGuess(gamePageModel);
+        // var numCorrect = 0;
+        // var positionCorrect = 0;
+        // var answerTracker = new Dictionary<int, int>();
+
+        // if(gamePageModel.PlayerGuess == null || gamePageModel.PlayerGuess.Length != answerToGuess.Length)
+        // {
+        //     feedback.Add($"Invalid guess. Please only guess {answerToGuess.Length} digits.");
+        //     return;
+        // }
+
+        // for (int i = 0; i < gamePageModel.PlayerGuess.Length; i++)
+        // {
+        //     if(Char.IsLetter(gamePageModel.PlayerGuess[i]))
+        //     {
+        //         feedback.Add($"Invalid guess. Please only use numbers.");
+        //         return;
+        //     }
+        //     playerGuess[i] = int.Parse(gamePageModel.PlayerGuess[i].ToString());
+        // }
+
+        // // This will be used to improve the efficiency of determining if the player guessed a number correctly
+        // foreach (var num in answerToGuess)
+        // {
+        //     if (answerTracker.ContainsKey(num))
+        //     {
+        //         answerTracker[num]++;
+        //     }
+        //     else
+        //     {
+        //         answerTracker.Add(num, 1);
+        //     }
+        // }
+
+        // for (int i = 0; i < playerGuess.Length; i++)
+        // {
+        //     if (answerTracker.ContainsKey(playerGuess[i]) && answerTracker[playerGuess[i]] > 0)
+        //     {
+        //         answerTracker[playerGuess[i]]--;
+        //         numCorrect++;
+        //     }
+        //     if (playerGuess[i] == answerToGuess[i]) positionCorrect++;
+        // }
+
+        // guessCount++;
+
+        // if(positionCorrect == answerToGuess.Length)
+        // {
+        //     feedback.Add($"Great job, you got it in {guessCount} attempts!");
+        //     gameWon = true;
+        //     EndGame(true);
+        // }
+        // else
+        // {
+        //     feedback.Add($"You guessed {gamePageModel.PlayerGuess} and got {numCorrect} numbers correct and {positionCorrect} positions correct.");
+        //     if(guessCount >= MAX_ATTEMPTS)
+        //     {
+        //         feedback.Add($"The correct answer was {answerToGuess} Unfortunately that was your last chance, try playing again");
+        //         EndGame(false);
+        //     }
+        // }
+    }
+
+    public void RestartGame()
+    {
+        gamePageModel.Feedback = new List<string>();
+        gameStarted = false;
+    }
+
+    public void GetHint()
+    {
+        if(remainingHints > 0)
+        {
+            var hintPosition = gamePageModel.AnswerToGuess.Length - remainingHints;
+            var hint = $"The number in position {hintPosition + 1} is {gamePageModel.AnswerToGuess[hintPosition]}";
+            gamePageModel.Feedback.Add($"Hint: {hint}");
+            remainingHints--;
+        }
+        else
+        {
+            gamePageModel.Feedback.Add($"You have no more hints remaining");
+        };
+    }
+
+    public void GiveAnswer()
+    {
+        gamePageModel.Feedback.Add($"The correct answer was {string.Join("", gamePageModel.AnswerToGuess)}");
+    }
+}

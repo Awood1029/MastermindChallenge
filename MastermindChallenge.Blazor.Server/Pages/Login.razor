@@ -1,0 +1,61 @@
+﻿@page "/player/login"
+@inject IAuthenticationService _authService
+@inject NavigationManager _navManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="text-center">Login</h3>
+            <div class="card">
+                <div class="card-body">
+                    @if(!string.IsNullOrEmpty(message))
+                    {
+                        <p>@message</p>
+                    }
+                    <EditForm Model="LoginModel" OnValidSubmit="HandleLogin">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <label for="email">Username</label>
+                            <InputText class="form-control" @bind-Value="LoginModel.UserName" />
+                            <ValidationMessage For="@(() => LoginModel.UserName)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Password</label>
+                            <InputText class="form-control" type="password" @bind-Value="LoginModel.Password" />
+                            <ValidationMessage For="@(() => LoginModel.Password)" />
+                        </div>
+
+                    <button type="submit" class="btn btn-primary mt-2 w-100">Login</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    PlayerLoginDto LoginModel = new PlayerLoginDto();
+    string message = "";
+    public async Task HandleLogin()
+    {
+        try
+        {
+            var response = await _authService.AuthenticateAsync(LoginModel);
+
+            if(response)
+            {
+                _navManager.NavigateTo("/");
+            }
+            message = "Invalid Credentials. Please try again.";
+
+        }
+        catch (ApiException ex)
+        {
+            if (ex.StatusCode >= 200 && ex.StatusCode <= 299)
+            {
+            }
+            message = ex.Message;
+        }
+    }
+}
