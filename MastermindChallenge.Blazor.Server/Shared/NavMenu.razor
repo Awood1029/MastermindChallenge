@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">MastermindChallenge.Blazor.Server</a>
+        <a class="navbar-brand" href="">MastermindChallenge</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -10,18 +10,12 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link" href="">
+                <span class="oi oi-home" aria-hidden="true"></span> Game
             </NavLink>
         </div>
-
         <AuthorizeView>
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="game">
-                        <span class="oi oi-home" aria-hidden="true"></span> @context.User?.Identity?.Name
-                    </NavLink>
-                </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="leaderboard">
                         <span class="oi oi-home" aria-hidden="true"></span> Leaderboard
@@ -35,11 +29,6 @@
             </Authorized>
 
             <NotAuthorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="game">
-                        <span class="oi oi-home" aria-hidden="true"></span> Game
-                    </NavLink>
-                </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="player/registration">
                         <span class="oi oi-plus" aria-hidden="true"></span> Register

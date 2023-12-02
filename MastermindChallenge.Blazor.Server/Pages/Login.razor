@@ -8,6 +8,10 @@
             <h3 class="text-center">Login</h3>
             <div class="card">
                 <div class="card-body">
+                    @if(!string.IsNullOrEmpty(message))
+                    {
+                        <p>@message</p>
+                    }
                     <EditForm Model="LoginModel" OnValidSubmit="HandleLogin">
                         <DataAnnotationsValidator />
                         <ValidationSummary />
@@ -41,7 +45,7 @@
 
             if(response)
             {
-                _navManager.NavigateTo("/game");
+                _navManager.NavigateTo("/");
             }
             message = "Invalid Credentials. Please try again.";
 
@@ -51,7 +55,7 @@
             if (ex.StatusCode >= 200 && ex.StatusCode <= 299)
             {
             }
-            message = ex.Response;
+            message = ex.Message;
         }
     }
 }
