@@ -47,7 +47,6 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
         {
             var numCorrect = 0;
             var positionCorrect = 0;
-            var answerTracker = new Dictionary<int, int>();
 
             if (gamePageModel.PlayerGuessString == null || gamePageModel.PlayerGuessString.Length != gamePageModel.AnswerToGuess.Length)
             {
@@ -59,7 +58,7 @@ namespace MastermindChallenge.Blazor.Server.Services.Game
             ParsePlayerGuess(gamePageModel);
 
             // This will be used to improve the efficiency of determining if the player guessed a number correctly
-            CreateAnswerTracker(gamePageModel);
+            var answerTracker = CreateAnswerTracker(gamePageModel);
 
             for (int i = 0; i < gamePageModel.PlayerGuessArr.Length; i++)
             {
