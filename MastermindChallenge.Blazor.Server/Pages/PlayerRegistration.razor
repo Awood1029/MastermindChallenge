@@ -1,7 +1,6 @@
 ﻿@page "/player/registration"
 @inject IClient _httpClient
 @inject NavigationManager _navManager
-<h3>Create New Player Account</h3>
 
 @if(!string.IsNullOrEmpty(message)) {
     <div class="alert alert-danger">
@@ -18,16 +17,6 @@
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <InputText class="form-control" @bind-Value="RegistrationModel.FirstName" />
-                            <ValidationMessage For="@(() => RegistrationModel.FirstName)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <InputText class="form-control" @bind-Value="RegistrationModel.LastName" />
-                            <ValidationMessage For="@(() => RegistrationModel.LastName)" />
-                        </div>
-                        <div class="form-group">
                             <label for="userName">Username</label>
                             <InputText class="form-control" @bind-Value="RegistrationModel.UserName" />
                             <ValidationMessage For="@(() => RegistrationModel.UserName)" />
@@ -38,7 +27,11 @@
                             <ValidationMessage For="@(() => RegistrationModel.Password)" />
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-2 w-100">Register</button>
+                        <button type="submit" class="btn btn-primary mt-2 w-100" disabled="@isLoading">Register</button>
+                        @if (isLoading)
+                        {
+                            <p>Loading...</p>
+                        }
                     </EditForm>
                 </div>
             </div>
@@ -48,9 +41,11 @@
 
 @code {
     PlayerDto RegistrationModel = new PlayerDto();
-    string message = "";
+    private string message = "";
+    private bool isLoading = false;
     private async Task HandleRegistration()
     {
+        isLoading = true;
         try {
             await _httpClient.RegisterAsync(RegistrationModel);
             NavigateToLogin();
@@ -63,6 +58,7 @@
             }
             message = ex.Response;
         }
+        isLoading = false;
     }
 
     private void NavigateToLogin()

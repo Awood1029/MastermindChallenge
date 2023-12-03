@@ -62,7 +62,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        topScores = await _gameService.GetLeaderboard(4);
+        topScores = await _gameService.GetLeaderboard();
     }
 
 }

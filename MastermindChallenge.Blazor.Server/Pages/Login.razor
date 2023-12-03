@@ -1,6 +1,7 @@
 ﻿@page "/player/login"
 @inject IAuthenticationService _authService
 @inject NavigationManager _navManager
+@inject ILogger<Login> _logger
 
 <div class="container">
     <div class="row">
@@ -26,7 +27,11 @@
                             <ValidationMessage For="@(() => LoginModel.Password)" />
                         </div>
 
-                    <button type="submit" class="btn btn-primary mt-2 w-100">Login</button>
+                        <button type="submit" class="btn btn-primary mt-2 w-100" disabled="@isLoading">Login</button>
+                        @if (isLoading)
+                        {
+                            <p>Loading...</p>
+                        }
                     </EditForm>
                 </div>
             </div>
@@ -36,9 +41,12 @@
 
 @code {
     PlayerLoginDto LoginModel = new PlayerLoginDto();
-    string message = "";
+    private string message = "";
+    private bool isLoading = false;
+
     public async Task HandleLogin()
     {
+        isLoading = true;
         try
         {
             var response = await _authService.AuthenticateAsync(LoginModel);
@@ -52,10 +60,9 @@
         }
         catch (ApiException ex)
         {
-            if (ex.StatusCode >= 200 && ex.StatusCode <= 299)
-            {
-            }
-            message = ex.Message;
+            _logger.LogError(ex, $"Error logging in user: {LoginModel.UserName}. Invalid Credentials");
+            message = "Invalid Credentials. Please try again.";
         }
+        isLoading = false;
     }
 }
