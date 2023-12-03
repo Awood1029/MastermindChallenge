@@ -27,6 +27,7 @@ Leaderboards display the top 10 players for each difficulty level, based on the 
 - **Backend:** .NET Core, C#, EntityFramework
 - **Frontend:** Blazor Server
 - **Authentication:** .NET Identity, JWT
+- **Real-time Communication:** SignalR
 - **Database:** Azure SQL Database
 - **API Documentation:** NSwag Studio
 - **Logging:** Seq
