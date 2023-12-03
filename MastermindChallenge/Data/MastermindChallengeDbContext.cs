@@ -22,6 +22,8 @@ public partial class MastermindChallengeDbContext : IdentityDbContext
 
     public virtual DbSet<Player> Players { get; set; }
 
+    public virtual DbSet<Session> Sessions { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

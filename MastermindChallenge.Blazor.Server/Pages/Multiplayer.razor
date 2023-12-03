@@ -1,0 +1,70 @@
+﻿@page "/multiplayer"
+@using Microsoft.AspNetCore.SignalR.Client
+@inject IMultiplayerService _multiplayerService
+
+@if(!string.IsNullOrEmpty(message))
+{
+    <p>@message</p>
+}
+
+@if(inGame)
+{
+    <MultiplayerGameCard HubConnection="hubConnection"></MultiplayerGameCard>
+}
+else
+{
+    <button @onclick="CreateGame">Create Game</button>
+
+    @if(sessions != null)
+    {
+        <p>Available games:</p>
+        @foreach (var session in sessions)
+        {
+            <button @onclick="() => JoinGame(session.SessionId)">Join Game @session.SessionId</button>
+        }
+    }
+
+}
+
+@code {
+    HubConnection hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7220/connect")
+            .Build();
+    IEnumerable<Session> sessions;
+    bool inGame = false;
+    string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        sessions = await _multiplayerService.GetSessionsAsync();
+    }
+
+    async Task CreateGame()
+    {
+        await hubConnection.StartAsync();
+        var session = await _multiplayerService.CreateSession();
+        if(!string.IsNullOrEmpty(session.SessionId))
+        {
+            await hubConnection.SendAsync("JoinSession", session.SessionId);
+            inGame = true;
+        }
+        else
+        {
+            message = "Couldn't connect";
+        }
+    }
+
+    async Task JoinGame(string sessionId)
+    {
+        await hubConnection.StartAsync();
+        await hubConnection.SendAsync("JoinSession", sessionId);
+        inGame = true;
+        return;
+    }
+
+    // async Task RefreshSessions()
+    // {
+    //     _httpClient.GetFromJsonAsync
+    // }
+
+}
