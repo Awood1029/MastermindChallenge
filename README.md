@@ -40,6 +40,11 @@ Leaderboards display the top 10 players for each difficulty level, based on the 
 - Hint system revealing digits one at a time
 - Leaderboards for each difficulty level
 - Game results stored in the database
+- **Unfinished Multiplayer Feature:**
+  - Started implementation of a multiplayer feature using SignalR in Blazor.
+  - Created a MultiplayerController and Multiplayer Service.
+  - Note: This feature is currently incomplete and requires further development.
+
 
 ## Usage
 
