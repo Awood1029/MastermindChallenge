@@ -11,6 +11,7 @@ Welcome to the Mastermind Game, a project developed for LinkedIn's Reach Apprent
 - [Live Demo](#live-demo)
 - [API Endpoint](#api-endpoint)
 - [LinkedIn Backend Software Engineer Considerations](#linkedin-backend-software-engineer-considerations)
+- [Project Structure](#project-structure)
 ## Gameplay
 
 To play the game, users need to register or log in. Once authenticated, they can choose from three difficulty levels:
@@ -46,14 +47,13 @@ Leaderboards display the top 10 players for each difficulty level, based on the 
   - Created a MultiplayerController and Multiplayer Service.
   - Note: This feature is currently incomplete and requires further development.
 
-
 ## Usage
 
 To run the project locally, follow these steps:
 
 1. Clone the repository.
 2. Set up the necessary configurations (e.g., database connection).
-3. Run the .NET Core API and Blazor Server.
+3. Set the.NET Core API and Blazor Server as the startup projects in Visual Studio and run.
 
 ## Live Demo
 
@@ -99,3 +99,32 @@ Specific examples of this would include creating Services to handle business log
 ### 8. **Technological Adaptability**
 
 The use of Blazor Server for the UI highlights my adaptability to diverse technologies. This aligns with LinkedIn's dynamic tech environment, emphasizing the importance of staying current with emerging technologies.
+
+## Project Structure
+
+The solution consists of two projects:
+
+### 1. MastermindChallenge.API
+
+- **Controllers:**
+  - **Auth:** Contains API controllers related to authentication.
+  - **Game:** Holds API controllers for game-related functionality.
+
+- **Data:**
+  - **Models and DbContext:** This folder contains data models and the `DbContext` used by Entity Framework. It's responsible for defining the structure of the database and how the application interacts with it.
+
+- **ModelDtos:**
+  - **Dto Files:** This directory is dedicated to Data Transfer Objects (DTOs). DTOs are used when making API calls that don't require all the information from the original model, helping to optimize data transfer between the client and server.
+
+### 2. MastermindChallenge.Blazor.Server
+
+- **Models:**
+  - **GamePage Model:** Holds data specific to the game view in the Blazor application.
+
+- **Providers:**
+  - **ApiAuthenticationStateProvider:** Manages JWT and authentication logic for the Blazor application. It's responsible for tracking the authentication state of the user through the use of the JWT token.
+
+- **Services:**
+  - **Authentication Service:** Handles business logic related to user authentication.
+  - **Game Service:** Manages business logic and communication with the API.
+
